@@ -2,6 +2,7 @@
     'name': 'custom_cogs',
     'version': '1.0',
     'category': 'Accounting',
+    'author': 'Bluzee IT Consultants',
     'website':'https://www.bluzee.xyz',
     'summary': 'Compute Cost of Goods Sold and Profit for Sales and POS',
     'description': """Module to calculate COGS and Profit for POS and Sales separately with daily, monthly, or custom date range filters""",
