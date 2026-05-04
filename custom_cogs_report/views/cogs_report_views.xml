@@ -1,0 +1,57 @@
+<odoo>
+    <record id="view_cogs_report_form" model="ir.ui.view">
+        <field name="name">cogs.report.form</field>
+        <field name="model">cogs.report</field>
+        <field name="arch" type="xml">
+            <form string="COGS Report Wizard">
+                <sheet>
+                    <group>
+                        <field name="date_from"/>
+                        <field name="date_to"/>
+                        <field name="order_type"/>
+                    </group>
+
+                    <footer>
+                        <button string="Download PDF"
+                                type="object"
+                                name="action_download_pdf"
+                                class="btn-secondary"/>
+                        <button string="Close"
+                                class="btn-secondary"
+                                special="cancel"/>
+                    </footer>
+
+                    <notebook>
+                        <page string="Products Sold">
+                            <field name="report_lines">
+                                <tree editable="false">
+                                    <field name="product_id"/>
+                                    <field name="qty_sold_sales" attrs="{'invisible': [('parent.order_type', '=', 'pos')]}"/>
+                                    <field name="sale_price_sales" attrs="{'invisible': [('parent.order_type', '=', 'pos')]}"/>
+                                    <field name="cogs_sales" attrs="{'invisible': [('parent.order_type', '=', 'pos')]}"/>
+                                    <field name="profit_sales" attrs="{'invisible': [('parent.order_type', '=', 'pos')]}"/>
+                                    <field name="qty_sold_pos" attrs="{'invisible': [('parent.order_type', '=', 'sales')]}"/>
+                                    <field name="sale_price_pos" attrs="{'invisible': [('parent.order_type', '=', 'sales')]}"/>
+                                    <field name="cogs_pos" attrs="{'invisible': [('parent.order_type', '=', 'sales')]}"/>
+                                    <field name="profit_pos" attrs="{'invisible': [('parent.order_type', '=', 'sales')]}"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+
+                    <group string="Totals" col="2">
+                        <!-- <field name="total_sales_sales" attrs="{'invisible': [('order_type', '=', 'pos')]}" readonly="1"/> -->
+                        <field name="total_cogs_sales" attrs="{'invisible': [('order_type', '=', 'pos')]}" readonly="1"/>
+                        <!-- <field name="total_profit_sales" attrs="{'invisible': [('order_type', '=', 'pos')]}" readonly="1"/>
+                        <field name="gross_profit_percent_sales" attrs="{'invisible': [('order_type', '=', 'pos')]}" readonly="1"/> -->
+
+                        <!-- <field name="total_sales_pos" attrs="{'invisible': [('order_type', '=', 'sales')]}" readonly="1"/> -->
+                        <field name="total_cogs_pos" attrs="{'invisible': [('order_type', '=', 'sales')]}" readonly="1"/>
+                        <!-- <field name="total_profit_pos" attrs="{'invisible': [('order_type', '=', 'sales')]}" readonly="1"/>
+                        <field name="gross_profit_percent_pos" attrs="{'invisible': [('order_type', '=', 'sales')]}" readonly="1"/> -->
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>

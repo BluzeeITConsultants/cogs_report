@@ -1,0 +1,16 @@
+<odoo>
+    <menuitem id="accounting_reports_menu" name="Accounting Reports" parent="account.menu_finance"/>
+    <menuitem id="custom_cogs_menu" name="COGS Report" parent="accounting_reports_menu" sequence="10"/>
+
+    <record id="action_cogs_report" model="ir.actions.act_window">
+        <field name="name">COGS Report</field>
+        <field name="res_model">cogs.report</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="custom_cogs_report_menuitem"
+              name="Generate COGS Report"
+              parent="custom_cogs_menu"
+              action="action_cogs_report"/>
+</odoo>
