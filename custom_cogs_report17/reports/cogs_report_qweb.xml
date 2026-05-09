@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="cogs_report_qweb">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <t t-foreach="docs" t-as="doc">
+
+                        <!-- Company Header -->
+                        <div style="text-align:center; margin-bottom:20px;">
+                            <t t-if="doc.company_id.logo">
+                                <img t-att-src="'data:image/png;base64,%s' % (doc.company_id.logo.decode())"
+                                     alt="Company Logo"
+                                     style="max-height:80px; margin-bottom:8px;"/>
+                            </t>
+                            <h2 style="margin:0; font-size:20px;"><t t-esc="doc.company_id.name"/></h2>
+                            <p style="margin:0; font-size:12px;">
+                                <t t-esc="doc.company_id.street or ''"/>
+                                <t t-if="doc.company_id.street2">, <t t-esc="doc.company_id.street2"/></t><br/>
+                                <t t-esc="doc.company_id.city or ''"/>
+                                <t t-if="doc.company_id.state_id">, <t t-esc="doc.company_id.state_id.name"/></t>
+                                <t t-if="doc.company_id.zip"> - <t t-esc="doc.company_id.zip"/></t><br/>
+                                <t t-if="doc.company_id.phone">Phone: <t t-esc="doc.company_id.phone"/></t>
+                                <t t-if="doc.company_id.email"> | Email: <t t-esc="doc.company_id.email"/></t>
+                            </p>
+                        </div>
+
+                        <!-- Report Title -->
+                        <h3 style="text-align:center; margin-bottom:15px; border-bottom:2px solid #000; font-size:18px;">
+                            Cost of Goods Sold (COGS) Report
+                        </h3>
+
+                        <!-- Report Filters -->
+                        <table style="width:100%; margin-bottom:12px; font-size:13px;">
+                            <tr>
+                                <td><strong>Date From:</strong> <t t-esc="doc.date_from or ''"/></td>
+                                <td style="text-align:right;"><strong>Date To:</strong> <t t-esc="doc.date_to or ''"/></td>
+                            </tr>
+                            <tr>
+                                <td colspan="2"><strong>Order Type:</strong>
+                                    <t t-if="doc.order_type == 'sales'">Sales</t>
+                                    <t t-if="doc.order_type == 'pos'">POS</t>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- Report Data Table -->
+                        <t t-if="doc.order_type == 'sales'">
+                            <!-- Sales Table -->
+                            <table style="width:100%; border-collapse:collapse; font-size:12px;" border="1">
+                                <thead style="background-color:#f0f0f0;">
+                                    <tr>
+                                        <th style="padding:6px; text-align:center;">#</th>
+                                        <th style="padding:6px;">Product</th>
+                                        <th style="padding:6px; text-align:right;">Quantity</th>
+                                        <th style="padding:6px; text-align:right;">Sales Price</th>
+                                        <th style="padding:6px; text-align:right;">COGS</th>
+                                        <th style="padding:6px; text-align:right;">Profit</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-set="idx" t-value="1"/>
+                                    <t t-foreach="doc.report_lines" t-as="line">
+                                        <t t-if="line.qty_sold_sales">
+                                            <tr>
+                                                <td style="padding:5px; text-align:center;"><t t-esc="idx"/></td>
+                                                <td style="padding:5px;"><t t-esc="line.product_id.display_name or ''"/></td>
+                                                <td style="padding:5px; text-align:right;"><t t-esc="line.qty_sold_sales or 0"/></td>
+                                                <td style="padding:5px; text-align:right;"><t t-esc="line.sale_price_sales or 0"/></td>
+                                                <td style="padding:5px; text-align:right;"><t t-esc="line.cogs_sales or 0"/></td>
+                                                <td style="padding:5px; text-align:right;"><t t-esc="line.profit_sales or 0"/></td>
+                                            </tr>
+                                            <t t-set="idx" t-value="idx + 1"/>
+                                        </t>
+                                    </t>
+                                </tbody>
+                            </table>
+
+                            <!-- Sales Totals -->
+                            <div style="width:50%; margin-left:auto; margin-top:20px;">
+                                <table style="width:100%; border-collapse:collapse; font-size:12px;" border="1">
+                                    <thead style="background-color:#f0f0f0;">
+                                        <tr>
+                                            <th style="padding:6px;">Description</th>
+                                            <th style="padding:6px; text-align:right;">Amount</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- <tr><td>Total Sales</td><td style="text-align:right;"><t t-esc="doc.total_sales_sales or 0"/></td></tr> -->
+                                        <tr><td>Total COGS</td><td style="text-align:right;"><t t-esc="doc.total_cogs_sales or 0"/></td></tr>
+                                        <!-- <tr><td>Total Profit</td><td style="text-align:right;"><t t-esc="doc.total_profit_sales or 0"/></td></tr>
+                                        <tr><td>Profit %</td><td style="text-align:right;"><t t-esc="doc.gross_profit_percent_sales or 0"/>%</td></tr> -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </t>
+
+                        <t t-if="doc.order_type == 'pos'">
+                            <!-- POS Table -->
+                            <table style="width:100%; border-collapse:collapse; font-size:12px;" border="1">
+                                <thead style="background-color:#f0f0f0;">
+                                    <tr>
+                                        <th style="padding:6px; text-align:center;">#</th>
+                                        <th style="padding:6px;">Product</th>
+                                        <th style="padding:6px; text-align:right;">Quantity</th>
+                                        <th style="padding:6px; text-align:right;">Sales Price</th>
+                                        <th style="padding:6px; text-align:right;">COGS</th>
+                                        <th style="padding:6px; text-align:right;">Profit</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-set="idx" t-value="1"/>
+                                    <t t-foreach="doc.report_lines" t-as="line">
+                                        <t t-if="line.qty_sold_pos">
+                                            <tr>
+                                                <td style="padding:5px; text-align:center;"><t t-esc="idx"/></td>
+                                                <td style="padding:5px;"><t t-esc="line.product_id.display_name or ''"/></td>
+                                                <td style="padding:5px; text-align:right;"><t t-esc="line.qty_sold_pos or 0"/></td>
+                                                <td style="padding:5px; text-align:right;"><t t-esc="line.sale_price_pos or 0"/></td>
+                                                <td style="padding:5px; text-align:right;"><t t-esc="line.cogs_pos or 0"/></td>
+                                                <td style="padding:5px; text-align:right;"><t t-esc="line.profit_pos or 0"/></td>
+                                            </tr>
+                                            <t t-set="idx" t-value="idx + 1"/>
+                                        </t>
+                                    </t>
+                                </tbody>
+                            </table>
+
+                            <!-- POS Totals -->
+                            <div style="width:50%; margin-left:auto; margin-top:20px;">
+                                <table style="width:100%; border-collapse:collapse; font-size:12px;" border="1">
+                                    <thead style="background-color:#f0f0f0;">
+                                        <tr>
+                                            <th style="padding:6px;">Description</th>
+                                            <th style="padding:6px; text-align:right;">Amount</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- <tr><td>Total Sales</td><td style="text-align:right;"><t t-esc="doc.total_sales_pos or 0"/></td></tr> -->
+                                        <tr><td>Total COGS</td><td style="text-align:right;"><t t-esc="doc.total_cogs_pos or 0"/></td></tr>
+                                        <!-- <tr><td>Total Profit</td><td style="text-align:right;"><t t-esc="doc.total_profit_pos or 0"/></td></tr>
+                                        <tr><td>Profit %</td><td style="text-align:right;"><t t-esc="doc.gross_profit_percent_pos or 0"/>%</td></tr> -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </t>
+
+                    </t>
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>

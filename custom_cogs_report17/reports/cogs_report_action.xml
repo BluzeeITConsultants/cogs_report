@@ -1,0 +1,21 @@
+<odoo>
+
+    <record id="action_report_cogs" model="ir.actions.report">
+
+        <field name="name">COGS Report PDF</field>
+
+        <field name="model">cogs.report</field>
+
+        <field name="report_type">qweb-pdf</field>
+
+        <field name="report_name">custom_cogs_report.cogs_report_qweb</field>
+
+        <field name="report_file">custom_cogs_report.cogs_report_qweb</field>
+
+        <field name="binding_model_id" ref="model_cogs_report"/>
+
+        <field name="binding_type">report</field>
+
+    </record>
+
+</odoo>
