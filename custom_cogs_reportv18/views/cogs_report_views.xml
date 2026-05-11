@@ -1,0 +1,91 @@
+<odoo>
+    <record id="view_cogs_report_form" model="ir.ui.view">
+        <field name="name">cogs.report.form</field>
+        <field name="model">cogs.report</field>
+        <field name="arch" type="xml">
+
+            <form string="COGS Report Wizard">
+
+                <sheet>
+
+                    <group>
+                        <field name="date_from"/>
+                        <field name="date_to"/>
+                        <field name="order_type"/>
+                        <field name="company_id"/>
+                    </group>
+
+                    <notebook>
+
+                        <page string="Products Sold">
+
+                            <field name="report_lines">
+
+                                <list>
+
+                                    <field name="product_id"/>
+
+                                    <field name="qty_sold_sales"
+                                           column_invisible="parent.order_type == 'pos'"/>
+
+                                    <field name="sale_price_sales"
+                                           column_invisible="parent.order_type == 'pos'"/>
+
+                                    <field name="cogs_sales"
+                                           column_invisible="parent.order_type == 'pos'"/>
+
+                                    <field name="profit_sales"
+                                           column_invisible="parent.order_type == 'pos'"/>
+
+                                    <field name="qty_sold_pos"
+                                           column_invisible="parent.order_type == 'sales'"/>
+
+                                    <field name="sale_price_pos"
+                                           column_invisible="parent.order_type == 'sales'"/>
+
+                                    <field name="cogs_pos"
+                                           column_invisible="parent.order_type == 'sales'"/>
+
+                                    <field name="profit_pos"
+                                           column_invisible="parent.order_type == 'sales'"/>
+
+                                </list>
+
+                            </field>
+
+                        </page>
+
+                    </notebook>
+
+                    <group string="Totals" col="2">
+
+                        <field name="total_cogs_sales"
+                               invisible="order_type == 'pos'"
+                               readonly="1"/>
+
+                        <field name="total_cogs_pos"
+                               invisible="order_type == 'sales'"
+                               readonly="1"/>
+
+                    </group>
+
+                    <footer>
+
+                        <button string="Download PDF"
+                                type="object"
+                                name="action_download_pdf"
+                                class="btn btn-primary"/>
+
+                        <button string="Close"
+                                special="cancel"
+                                class="btn btn-secondary"/>
+
+                    </footer>
+
+                </sheet>
+
+            </form>
+
+        </field>
+    </record>
+</odoo>
